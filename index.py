@@ -8,7 +8,8 @@ class Compute:
         pass
 
     def get_users(self) -> list:
-        query = {'email': 'ktummala@gitam.in'}
+        xquery = {'$or': [{'email_sent': False}, {'email_sent': {'$exists': False}}]}
+        query = {**xquery, 'email': 'ramasathyasai2006@gmail.com'}
         users = list(prusers_collection.find(query))
         return users
 

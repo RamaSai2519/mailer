@@ -1,4 +1,5 @@
 import os
+import time
 import smtplib
 import traceback
 from email import encoders
@@ -6,7 +7,7 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from playwright.sync_api import sync_playwright
-from config import sender_email, sender_password
+from config import sender_email, sender_password, prusers_collection
 
 
 class EmailSender:
@@ -28,6 +29,7 @@ class EmailSender:
                 browser = p.chromium.launch(headless=True)
                 page = browser.new_page()
                 page.goto(url)
+                time.sleep(5)
 
                 page.pdf(
                     path=pdf_filename,
@@ -72,6 +74,7 @@ class EmailSender:
             text = msg.as_string()
             server.sendmail(self.sender_email, recipient_email, text)
             os.remove(pdf_filename)
+            prusers_collection.update_one({"email": user.get("email")}, {"$set": {"email_sent": True}})
             server.quit()
             return True
         else:
