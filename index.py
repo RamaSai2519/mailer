@@ -9,14 +9,13 @@ class Compute:
 
     def get_users(self) -> list:
         xquery = {'$or': [{'email_sent': False}, {'email_sent': {'$exists': False}}]}
-        query = {**xquery, 'email': 'ramasathyasai2006@gmail.com'}
+        query = {**xquery, 'email': 'sesikala@gitam.in'}
         users = list(prusers_collection.find(query))
         return users
 
     def generate_barcode(self, user_id: str) -> bytes:
         code_gen = CodeGenerator(user_id)
         barcode_filename = code_gen.save_qr_code_as_image()
-        print(barcode_filename)
         return barcode_filename
 
     def compute(self) -> None:
